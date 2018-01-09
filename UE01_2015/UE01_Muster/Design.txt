@@ -1,0 +1,111 @@
+
+ANFORDERUNGSSPEZIFIKATION: 
+==========================
+
+Das Modul PhoneBook soll folgendes leisten: 
+
+- Einfügen von neuen Einträgen. Jeder Eintrag besteht aus Name, Vorwahl und Nummer.
+  Einträge werden sortiert eingefügt. 
+  Wenn ein Eintrag mit gleichem Namen bereits vorhanden ist, wird der alte Eintrag überschrieben. 
+  
+- Abfragen, ob ein Eintrag mit einem bestimmten Namen bereits vorhanden ist. 
+
+- Springen auf den ersten Eintrag im Telefonbuch. 
+  Es wird der erste Eintrag zurückgegeben. 
+  Wenn kein Eintrag vorhanden ist, soll null geliefert werden. 
+  
+- Suche nach einem Eintrag mit einem bestimmten Namen. 
+  Es wird der Eintrag zurückgegeben. 
+  Wenn kein Eintrag mit diesen Namen vorhanden ist, soll null geliefert werden. 
+  
+- Springen auf den ersten Eintrag mit bestimmtem ersten Buchstaben. 
+  Wenn kein Eintrag mit diesem Buchstaben vorhanden ist, wird der nächste gültige 
+  Eintrag eines Folgebuchstabens verwendet. 
+  Wenn kein Eintrag eines Folgebuchstabens vorhanden, soll null geliefert werden. 
+  
+- Springen auf den nächsten Eintrag ausgehend von aktuellen Eintrag. 
+  Es wird der Eintrag zurückgegeben. 
+  Wenn kein weiterer Eintrag vorhanden ist, soll soll auf den ersten gesprungen werden. 
+
+- Prüfen, ob weiterer Eintrag nach aktuellen Eintrag vorhanden ist. 
+
+
+ENTWURF: 
+=========
+
+Klasse Entry 
+------------
+	Einträge in einem Telefonbuch 
+	
+	Eigenschaften: 
+		Name 
+		Vorwahl 
+		Nummer 
+		
+		
+Klasse PhoneBook
+----------------
+	Repräsentiert Telefonbuch 
+	
+	Operationen: 
+		Einfügen eines neuen Eintrags mit Name, Vorwahl und Nummer 
+		Prüfen, ob Eintrag mit Name vorhanden 
+		Zugriff und Springen auf den ersten Eintrag
+		Zugriff und Springen auf den nächsten Eintrag
+		Zugriff und Springen auf den ersten Eintrag mit bestimmten Namen
+		Zugriff und Springen auf einen Eintrag mit bestimmten Buchstaben
+		Abfrage, ob noch weitere Einträge vorhanden sind 
+		
+	Verwendet intern eine lineare Liste von Einträgen sortiert nach
+	Namen (Klasse EntryList)
+	
+	Verwendet eine Indexstruktur, um für die Buchstaben den Zugriff auf den ersten 
+	Eintrag zu speichern (Klasse PhoneBookIndex)
+	
+	Verwendet einen Cursor, um einen aktuellen Eintrag zu speichern und damit 
+	das Blättern im Telefonbuch zu realisieren
+	
+	
+Klasse EntryList
+----------------
+	Hilfsklasse für lineare verkettete Liste für Entry-Objekte 
+	Verwendet EntryNode für die Verkettung
+	
+	Operationen: 
+		Sortiertes Einfügen eines Eintrags mit Namen, Vorwahl und Nummer 
+		Sortiertes Einfügen eines Entry-Objektes
+		Suchen nach dem Knoten mit Eintrag mit gegebenen Namen
+		Zugriff auf den ersten Knoten 
+		Zugriff auf den nächsten Knoten für einem gegebenen Knoten 
+		Prüfen, ob Liste leer ist 
+	
+		
+Klasse EntryNode
+----------------
+
+	Hilfsklasse 
+	Knoten für die verkettete lineare Liste 
+	
+	Enthält: 
+		Referenz zu Entry-Objekt 
+		Zeiger auf den nächsten Knoten 
+	
+		
+Klasse PhoneBookIndex 
+---------------------
+
+	Hilfsklasse 
+	Indexstruktur, um für jeden Buchstaben auf den ersten Eintrag in der linearen 
+	Liste zuzugreifen 
+	
+	verwendet ein Array der Länge 26 (für jeden Buchstaben), die die 
+	Verweise auf die Knoten in der linearen Liste speichern 
+	
+	Operationen: 
+		Setzen des Knotens für einen gegebenen Buchstaben 
+		Zugriff auf den ersten Knoten für einen gegebenen Buchstaben
+		Update des Knotens für einen gegebenen Buchstaben: 
+			Ist für den Buchstaben noch kein Knoten eingetragen, 
+			oder kommt der neue Eintrag alphabetisch vor dem eingetragenen, 
+			wird der neue Knoten in die Indexstruktur eingetragen 
+		

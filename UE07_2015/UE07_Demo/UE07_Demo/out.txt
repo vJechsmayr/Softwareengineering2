@@ -1,0 +1,2 @@
+Hello World!
+The current thread's name is main, cpu count = 8
